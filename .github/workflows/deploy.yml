@@ -16,28 +16,28 @@ jobs:
       - name: Test
         run: |-
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t rallycoding/react-test -f ./client/Dockerfile.dev ./client
-          docker run -e CI=true rallycoding/react-test npm test
+          docker build -t madara2906/react-test -f ./client/Dockerfile.dev ./client
+          docker run -e CI=true madara2906/react-test npm test
 
       - name: Build
         run: |-
-          docker build -t rallycoding/multi-client:latest -t rallycoding/multi-client:${{ env.SHA }} -f ./client/Dockerfile ./client
-          docker build -t rallycoding/multi-server:latest -t rallycoding/multi-server:${{ env.SHA }} -f ./server/Dockerfile ./server
-          docker build -t rallycoding/multi-worker:latest -t rallycoding/multi-worker:${{ env.SHA }} -f ./worker/Dockerfile ./worker
+          docker build -t madara2906/multi-client:latest -t madara2906/multi-client:${{ env.SHA }} -f ./client/Dockerfile ./client
+          docker build -t madara2906/multi-server:latest -t madara2906/multi-server:${{ env.SHA }} -f ./server/Dockerfile ./server
+          docker build -t madara2906/multi-worker:latest -t madara2906/multi-worker:${{ env.SHA }} -f ./worker/Dockerfile ./worker
 
       - name: Push
         run: |-
-          docker push rallycoding/multi-client:latest
-          docker push rallycoding/multi-server:latest
-          docker push rallycoding/multi-worker:latest
+          docker push madara2906/multi-client:latest
+          docker push madara2906/multi-server:latest
+          docker push madara2906/multi-worker:latest
 
-          docker push rallycoding/multi-client:${{ env.SHA }}
-          docker push rallycoding/multi-server:${{ env.SHA }}
-          docker push rallycoding/multi-worker:${{ env.SHA }}
+          docker push madara2906/multi-client:${{ env.SHA }}
+          docker push madara2906/multi-server:${{ env.SHA }}
+          docker push madara2906/multi-worker:${{ env.SHA }}
 
       - name: Apply
         run: |-
           kubectl apply -f k8s
-          kubectl set image deployments/server-deployment server=rallycoding/multi-server:${{ env.SHA }}
-          kubectl set image deployments/client-deployment client=rallycoding/multi-client:${{ env.SHA }}
-          kubectl set image deployments/worker-deployment worker=rallycoding/multi-worker:${{ env.SHA }}
+          kubectl set image deployments/server-deployment server=madara2906/multi-server:${{ env.SHA }}
+          kubectl set image deployments/client-deployment client=madara2906/multi-client:${{ env.SHA }}
+          kubectl set image deployments/worker-deployment worker=madara2906/multi-worker:${{ env.SHA }}
